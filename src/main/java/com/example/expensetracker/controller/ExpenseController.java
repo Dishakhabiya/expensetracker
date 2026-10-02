@@ -3,6 +3,8 @@ package com.example.expensetracker.controller;
 import com.example.expensetracker.model.Expense;
 import com.example.expensetracker.service.ExpenseService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,10 @@ public class ExpenseController {
   return expenseService.saveExpense(expense);
  }
 
- // Get all expenses
+ // Get all expenses with pagination and sorting
  @GetMapping
- public List<Expense> getAllExpenses() {
-  return expenseService.getAllExpenses();
+ public Page<Expense> getAllExpenses(Pageable pageable) {
+  return expenseService.getAllExpenses(pageable);
  }
 
  // Get expense by title
@@ -48,7 +50,6 @@ public class ExpenseController {
  public Expense updateExpense(
          @PathVariable Long id,
          @Valid @RequestBody Expense expense) {
-
   return expenseService.updateExpense(id, expense);
  }
 

@@ -3,6 +3,8 @@ package com.example.expensetracker.service;
 import com.example.expensetracker.exception.ExpenseNotFoundException;
 import com.example.expensetracker.model.Expense;
 import com.example.expensetracker.repository.ExpenseRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,18 +26,19 @@ public class ExpenseService {
         return expenseRepo.findByTitle(title);
     }
 
-    public List<Expense> getAllExpenses() {
-        return expenseRepo.findAll();
+    // Pagination and sorting
+    public Page<Expense> getAllExpenses(Pageable pageable) {
+        return expenseRepo.findAll(pageable);
     }
 
     public Expense getExpenseById(Long id) {
         return expenseRepo.findById(id)
                 .orElseThrow(() ->
-                        new ExpenseNotFoundException("Expense not found with id: " + id));
+                        new ExpenseNotFoundException(
+                                "Expense not found with id: " + id));
     }
 
     public Expense updateExpense(Long id, Expense expense) {
-
         Expense existing = getExpenseById(id);
 
         existing.setTitle(expense.getTitle());
