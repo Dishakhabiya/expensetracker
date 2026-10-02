@@ -1,39 +1,42 @@
 package com.example.expensetracker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "expenses")
 public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long Id;
-    String title;
-    String category;
-    LocalDate date;
-    Integer amount;
+    private Long id;
 
-    public Long getId() {
-        return Id;
-    }
+    @NotBlank(message = "Title is required")
+    private String title;
 
-    public void setId(Long id) {
-        Id = id;
-    }
+    @NotBlank(message = "Category is required")
+    private String category;
+
+    @Positive(message = "Amount must be greater than zero")
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal amount;
+
+    @Column(nullable = false)
+    private LocalDate date;
 
     public Expense() {
     }
 
-    public Expense(String title, String category, LocalDate date, int amount) {
-        this.title = title;
-        this.category = category;
-        this.date = date;
-        this.amount = amount;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -52,19 +55,19 @@ public class Expense {
         this.category = category;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     public LocalDate getDate() {
         return date;
     }
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
     }
 }
