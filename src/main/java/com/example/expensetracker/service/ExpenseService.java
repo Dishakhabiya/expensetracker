@@ -1,5 +1,6 @@
 package com.example.expensetracker.service;
 
+import com.example.expensetracker.exception.ExpenseNotFoundException;
 import com.example.expensetracker.model.Expense;
 import com.example.expensetracker.repository.ExpenseRepo;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class ExpenseService {
     public Expense getExpenseById(Long id) {
         return expenseRepo.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Expense not found with id: " + id));
+                        new ExpenseNotFoundException("Expense not found with id: " + id));
     }
 
     public Expense updateExpense(Long id, Expense expense) {
@@ -47,7 +48,8 @@ public class ExpenseService {
 
     public void deleteExpense(Long id) {
         if (!expenseRepo.existsById(id)) {
-            throw new RuntimeException("Expense not found with id: " + id);
+            throw new ExpenseNotFoundException(
+                    "Expense not found with id: " + id);
         }
 
         expenseRepo.deleteById(id);
