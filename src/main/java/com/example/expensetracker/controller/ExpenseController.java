@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,55 +21,70 @@ public class ExpenseController {
   this.expenseService = expenseService;
  }
 
- // Create expense
+ // Create an expense owned by the logged-in user
  @PostMapping
  @ResponseStatus(HttpStatus.CREATED)
- public Expense saveExpense(@Valid @RequestBody Expense expense) {
-  return expenseService.saveExpense(expense);
+ public Expense saveExpense(
+         @Valid @RequestBody Expense expense,
+         Authentication authentication) {
+  return expenseService.saveExpense(expense, authentication.getName());
  }
 
- // Get all expenses with pagination and sorting
+ // Get the logged-in user's expenses with pagination and sorting
  @GetMapping
- public Page<Expense> getAllExpenses(Pageable pageable) {
-  return expenseService.getAllExpenses(pageable);
+ public Page<Expense> getAllExpenses(
+         Pageable pageable,
+         Authentication authentication) {
+  return expenseService.getAllExpenses(pageable, authentication.getName());
  }
 
- // Get expense by title
+ // Get one of the logged-in user's expenses by title
  @GetMapping("/title/{title}")
- public Expense getExpenseByTitle(@PathVariable String title) {
-  return expenseService.getByTitleExpense(title);
+ public Expense getExpenseByTitle(
+         @PathVariable String title,
+         Authentication authentication) {
+  return expenseService.getByTitleExpense(title, authentication.getName());
  }
 
- // Get expense by ID
+ // Get one of the logged-in user's expenses by ID
  @GetMapping("/{id}")
- public Expense getExpenseById(@PathVariable Long id) {
-  return expenseService.getExpenseById(id);
+ public Expense getExpenseById(
+         @PathVariable Long id,
+         Authentication authentication) {
+  return expenseService.getExpenseById(id, authentication.getName());
  }
 
- // Update expense
+ // Update one of the logged-in user's expenses
  @PutMapping("/{id}")
  public Expense updateExpense(
          @PathVariable Long id,
-         @Valid @RequestBody Expense expense) {
-  return expenseService.updateExpense(id, expense);
+         @Valid @RequestBody Expense expense,
+         Authentication authentication) {
+  return expenseService.updateExpense(id, expense, authentication.getName());
  }
 
- // Delete expense
+ // Delete one of the logged-in user's expenses
  @DeleteMapping("/{id}")
  @ResponseStatus(HttpStatus.NO_CONTENT)
- public void deleteExpense(@PathVariable Long id) {
-  expenseService.deleteExpense(id);
+ public void deleteExpense(
+         @PathVariable Long id,
+         Authentication authentication) {
+  expenseService.deleteExpense(id, authentication.getName());
  }
 
- // Get expenses by category
+ // Get the logged-in user's expenses by category
  @GetMapping("/category/{category}")
- public List<Expense> getByCategory(@PathVariable String category) {
-  return expenseService.getByCategory(category);
+ public List<Expense> getByCategory(
+         @PathVariable String category,
+         Authentication authentication) {
+  return expenseService.getByCategory(category, authentication.getName());
  }
 
- // Search expenses by title
+ // Search the logged-in user's expenses by title
  @GetMapping("/search")
- public List<Expense> searchByTitle(@RequestParam String title) {
-  return expenseService.searchByTitle(title);
+ public List<Expense> searchByTitle(
+         @RequestParam String title,
+         Authentication authentication) {
+  return expenseService.searchByTitle(title, authentication.getName());
  }
 }

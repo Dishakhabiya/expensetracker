@@ -1,5 +1,5 @@
 package com.example.expensetracker.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -28,6 +28,10 @@ public class Expense {
     @Column(nullable = false)
     private LocalDate date;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private AppUser owner;
     public Expense() {
     }
 
@@ -69,5 +73,12 @@ public class Expense {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+    public AppUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(AppUser owner) {
+        this.owner = owner;
     }
 }
