@@ -143,5 +143,3 @@ The application implements JWT-based authentication and user-specific authorizat
 - Budget management and spending limits.
 - Docker-based deployment.
 - Cloud deployment.
-
-## 👩‍💻 Author
